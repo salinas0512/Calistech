@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // Configuración base de Axios
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
+  baseURL: import.meta.env.VITE_API_URL || 'https://calistech.onrender.com',
   timeout: 10000
 })
 
