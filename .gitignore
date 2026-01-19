@@ -1,0 +1,15 @@
+# 🔒 Archivos sensibles
+.env
+
+# 🐍 Python
+__pycache__/
+*.pyc
+venv/
+
+# 🧱 Node.js / Vue
+node_modules/
+dist/
+
+# ⚙️ Configuración local
+.vscode/
+.DS_Store
