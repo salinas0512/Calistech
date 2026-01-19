@@ -54,7 +54,7 @@ async function handleRegister() {
     return
   }
   try {
-    await axios.post('http://localhost:8000/usuarios/registro', {
+    await axios.post('https://calistech.onrender.com/usuarios/registro', {
       nombre: nombre.value,
       email: email.value,
       contrasena: password.value,
