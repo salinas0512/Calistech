@@ -7,7 +7,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from .database import SessionLocal
-import backend.app.models as models
+from . import models
 import os
 from dotenv import load_dotenv
 
