@@ -14,22 +14,45 @@
       <div class="perfil-extra">
         <div class="perfil-objetivo">
           <label>Objetivo personal:</label>
-          <span>{{ user.objetivo || 'No definido' }}</span>
-          <button class="perfil-btn perfil-btn-mini" @click="editarObjetivo">Editar</button>
+          <span v-if="!editandoObjetivo">{{ user.objetivo || 'No definido' }}</span>
+          <select v-else v-model="nuevoObjetivo">
+            <option v-for="op in objetivos" :key="op" :value="op">{{ op }}</option>
+          </select>
+          <button class="perfil-btn perfil-btn-mini" v-if="!editandoObjetivo" @click="editarObjetivo">Seleccionar</button>
+          <button class="perfil-btn perfil-btn-mini" v-else @click="guardarObjetivo">Guardar</button>
         </div>
         <div class="perfil-nivel">
           <label>Nivel actual:</label>
-          <span>{{ user.nivel || 'No definido' }}</span>
-        </div>
-        <div class="perfil-preferencias">
-          <label>Preferencias:</label>
-          <span>{{ user.preferencias || 'No definidas' }}</span>
+          <span v-if="!editandoNivel">{{ user.nivel || 'No definido' }}</span>
+          <select v-else v-model="nuevoNivel">
+            <option v-for="nivel in niveles" :key="nivel" :value="nivel">{{ nivel }}</option>
+          </select>
+          <button class="perfil-btn perfil-btn-mini" v-if="!editandoNivel" @click="editarNivel">Seleccionar</button>
+          <button class="perfil-btn perfil-btn-mini" v-else @click="guardarNivel">Guardar</button>
         </div>
       </div>
       <div class="perfil-acciones">
-        <button class="perfil-btn" @click="editarPerfil">Editar perfil</button>
         <button class="perfil-btn perfil-btn-secundario" @click="cambiarContrasena">Cambiar contraseña</button>
-        <button class="perfil-btn perfil-btn-peligro" @click="eliminarCuenta">Eliminar cuenta</button>
+        <button class="perfil-btn perfil-btn-peligro" @click="mostrarModalEliminar = true">Eliminar cuenta</button>
+        <!-- Modal de confirmación para eliminar cuenta -->
+        <div v-if="mostrarModalEliminar" class="modal-eliminar-overlay">
+          <div class="modal-eliminar">
+            <h3 v-if="!eliminandoCuenta">¿Eliminar cuenta?</h3>
+            <p v-if="!eliminandoCuenta">Esta acción no se puede deshacer. ¿Seguro que quieres eliminar tu cuenta?</p>
+            <div v-if="!eliminandoCuenta" class="modal-eliminar-btns">
+              <button class="perfil-btn perfil-btn-peligro" @click="confirmarEliminarCuenta">Eliminar</button>
+              <button class="perfil-btn perfil-btn-secundario" @click="mostrarModalEliminar = false">Cancelar</button>
+            </div>
+            <!-- Estado de eliminación -->
+            <div v-if="eliminandoCuenta" class="modal-eliminar-estado">
+              <div class="spinner"></div>
+              <p class="modal-eliminar-mensaje">
+                <span v-if="!mensajeExito">Eliminando cuenta...</span>
+                <span v-else style="color:#e74c3c;font-weight:600;">{{ mensajeExito }}</span>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="perfil-progreso">
         <h3>Resumen de progreso</h3>
@@ -44,28 +67,135 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+// Modal de confirmación para eliminar cuenta
+const mostrarModalEliminar = ref(false)
+const eliminandoCuenta = ref(false)
+const mensajeExito = ref('')
+
+async function confirmarEliminarCuenta() {
+  eliminandoCuenta.value = true
+  try {
+    await api.delete('/usuarios/eliminar-cuenta')
+    mensajeExito.value = 'Cuenta eliminada correctamente. Redirigiendo...'
+    setTimeout(() => {
+      auth.logout()
+      router.push('/')
+    }, 2500) // delay igual al registro exitoso
+  } catch (e) {
+    mensajeError.value = 'Error al eliminar la cuenta. Intenta nuevamente.'
+    setTimeout(() => { mensajeError.value = '' }, 2000)
+  } finally {
+    setTimeout(() => {
+      mostrarModalEliminar.value = false
+      eliminandoCuenta.value = false
+      mensajeExito.value = ''
+    }, 2500)
+  }
+}
+import { ref, onMounted } from 'vue'
+import { useAuthStore } from '../store/auth'
+import api from '../services/api'
+import { useRouter } from 'vue-router'
 const defaultAvatar = '/avatar-default.png'
-// Simulación de datos de usuario (reemplazar por datos reales del store o API)
-const user = ref({
-  fotoPerfil: '',
-  nombre: 'Nombre Usuario',
-  email: 'usuario@email.com',
-  rol: 'Usuario',
-  fechaRegistro: '2024-01-01',
-  objetivo: 'Mejorar fuerza',
-  nivel: 'Intermedio',
-  preferencias: 'Mañana, Parque Central, Rutinas Fullbody',
-  rutinasMes: 12
-})
+const user = ref({})
+const auth = useAuthStore()
+
+// Opciones fijas para nivel y objetivo
+const niveles = ['Principiante', 'Intermedio', 'Avanzado']
+const objetivos = ['Bajar de peso', 'Ganar músculo', 'Mantenimiento', 'Mejorar fuerza']
+
+const editandoNivel = ref(false)
+const editandoObjetivo = ref(false)
+const nuevoNivel = ref('')
+const nuevoObjetivo = ref('')
+
+async function fetchUserProfile() {
+  try {
+    if (auth.user && auth.user.id) {
+      const { data } = await api.get(`/usuarios/${auth.user.id}`)
+      const rolFromApi = (typeof data.rol === 'string' && data.rol) || (data.rol && data.rol.nombre) || data.role || (data.role && data.role.name) || data.rol_nombre || data.rolName
+      user.value = {
+        fotoPerfil: data.fotoPerfil || '',
+        nombre: data.nombre,
+        email: data.email,
+        rol: rolFromApi || auth.user?.rol || '',
+        fechaRegistro: data.created_at ? data.created_at.split('T')[0] : '',
+        objetivo: data.objetivo || '',
+        nivel: data.nivel || '',
+        preferencias: data.preferencias || '',
+        rutinasMes: data.rutinasMes || 0
+      }
+      nuevoNivel.value = user.value.nivel
+      nuevoObjetivo.value = user.value.objetivo
+    }
+  } catch (e) {
+    user.value = { nombre: 'Error al cargar', email: '', rol: '', fechaRegistro: '', objetivo: '', nivel: '', preferencias: '', rutinasMes: 0 }
+  }
+}
+
+onMounted(fetchUserProfile)
+
 function cambiarFoto() { /* lógica para subir foto */ }
-function editarPerfil() { /* lógica para editar perfil */ }
 function cambiarContrasena() { /* lógica para cambiar contraseña */ }
-function eliminarCuenta() { /* lógica para eliminar cuenta */ }
-function editarObjetivo() { /* lógica para editar objetivo */ }
+
+/* Eliminar cuenta */
+const router = useRouter()
+async function eliminarCuenta() {
+  const seguro = confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.');
+  if (!seguro) return;
+  try {
+    await api.delete('/usuarios/eliminar-cuenta')
+    alert('Cuenta eliminada correctamente. ¡Hasta pronto!')
+    auth.logout()
+    router.push('/')
+  } catch (e) {
+    alert('Error al eliminar la cuenta. Intenta nuevamente.')
+  }
+}
+function editarObjetivo() { editandoObjetivo.value = true }
+function guardarObjetivo() {
+  user.value.objetivo = nuevoObjetivo.value
+  editandoObjetivo.value = false
+  // Aquí luego se hará el POST/PUT al backend
+}
+function editarNivel() { editandoNivel.value = true }
+function guardarNivel() {
+  user.value.nivel = nuevoNivel.value
+  editandoNivel.value = false
+  // Aquí luego se hará el POST/PUT al backend
+}
 </script>
 
 <style scoped>
+/* Modal de eliminación */
+.modal-eliminar-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-eliminar {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(67,176,42,0.13);
+  padding: 2rem 2.2rem 1.5rem 2.2rem;
+  text-align: center;
+  max-width: 340px;
+}
+.modal-eliminar h3 {
+  color: #e74c3c;
+  font-size: 1.25rem;
+  margin-bottom: 0.7rem;
+}
+.modal-eliminar-btns {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-top: 1.2rem;
+}
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
 .perfil-container {
   min-height: 100vh;
@@ -200,5 +330,32 @@ function editarObjetivo() { /* lógica para editar objetivo */ }
   font-size: 0.98rem;
   margin: 0 0.2rem;
   font-weight: 600;
+}
+.spinner {
+  margin: 0 auto 1rem auto;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #e74c3c;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.modal-eliminar-estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.2rem;
+}
+.modal-eliminar-mensaje {
+  color: #e74c3c;
+  font-weight: 600;
+  font-size: 1.08rem;
+  margin-top: 0.5rem;
+  text-align: center;
 }
 </style>

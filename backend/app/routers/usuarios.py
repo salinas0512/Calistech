@@ -18,6 +18,15 @@ def get_db():
         db.close()
 
 # -----Endpoints para usuarios-----
+# Endpoint para que el usuario elimine su propia cuenta
+@router.delete("/eliminar-cuenta")
+def eliminar_mi_cuenta(db: Session = Depends(get_db), current_user: models.Usuario = Depends(auth.get_current_user)):
+    usuario = db.query(models.Usuario).filter(models.Usuario.id == current_user.id).first()
+    if not usuario:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    db.delete(usuario)
+    db.commit()
+    return {"ok": True, "msg": "Tu cuenta ha sido eliminada"}
 
 # Registro público de usuario (sin autenticación)
 @router.post("/registro", response_model=schemas.UsuarioOut)
@@ -66,13 +75,19 @@ def create_usuario(usuario: schemas.UsuarioCreate, db: Session = Depends(get_db)
 
 # Eliminar un usuario
 @router.delete("/{usuario_id}")
-def delete_usuario(usuario_id: int, db: Session = Depends(get_db), current_user: models.Usuario = Depends(auth.require_admin)):
+def delete_usuario(usuario_id: int, db: Session = Depends(get_db), current_user: models.Usuario = Depends(auth.get_current_user)):
     usuario = db.query(models.Usuario).filter(models.Usuario.id == usuario_id).first()
     if not usuario:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
-    db.delete(usuario)
-    db.commit()
-    return {"ok": True, "msg": "Usuario eliminado"}
+    rol = getattr(current_user.rol, "nombre", None)
+    if isinstance(rol, str):
+        rol = rol.lower()
+    # Solo admin o el propio usuario pueden eliminar
+    if rol == "administrador" or current_user.id == usuario_id:
+        db.delete(usuario)
+        db.commit()
+        return {"ok": True, "msg": "Usuario eliminado"}
+    raise HTTPException(status_code=403, detail="No tienes permiso para eliminar esta cuenta")
 
 # Actualizar un usuario
 @router.put("/{usuario_id}", response_model=schemas.UsuarioOut)
