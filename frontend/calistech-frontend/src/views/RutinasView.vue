@@ -23,6 +23,27 @@
               </button>
             </div>
           </div>
+          <div class="rutina-timer-row">
+            <span class="rutina-timer-label">Duración: {{ rutina.duracion }} min</span>
+            <button class="timer-play-btn" @click="iniciarTemporizador(rutina)">
+              <i class="fa-solid fa-play"></i>
+            </button>
+          </div>
+          <div v-if="temporizadorActivo && rutinaTemporizadorId === rutina.id" class="timer-box">
+            <span class="timer-tiempo">{{ formatoTiempo(temporizadorRestante) }}</span>
+            <button class="timer-control-btn" @click="pausarTemporizador" v-if="!temporizadorPausado">
+              <i class="fa-solid fa-pause"></i>
+            </button>
+            <button class="timer-control-btn" @click="reanudarTemporizador" v-if="temporizadorPausado">
+              <i class="fa-solid fa-play"></i>
+            </button>
+            <button class="timer-control-btn" @click="reiniciarTemporizador">
+              <i class="fa-solid fa-rotate-left"></i>
+            </button>
+            <button class="timer-control-btn" @click="finalizarTemporizador">
+              <i class="fa-solid fa-stop"></i>
+            </button>
+          </div>
           <p>Nivel: {{ rutina.nivel }}</p>
           <p v-if="rutina.ejercicios">Ejercicios: {{ rutina.ejercicios.length }}</p>
           <button class="rutinas-btn-secundario" @click="verDetalleRutina(rutina)">Ver detalles</button>
@@ -130,6 +151,50 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+let temporizadorInterval = null
+const temporizadorActivo = ref(false)
+const temporizadorRestante = ref(0)
+const rutinaTemporizadorId = ref(null)
+const temporizadorPausado = ref(false)
+
+function iniciarTemporizador(rutina) {
+  if (temporizadorInterval) clearInterval(temporizadorInterval)
+  temporizadorRestante.value = rutina.duracion * 60
+  rutinaTemporizadorId.value = rutina.id
+  temporizadorActivo.value = true
+  temporizadorPausado.value = false
+  temporizadorInterval = setInterval(() => {
+    if (!temporizadorPausado.value && temporizadorRestante.value > 0) {
+      temporizadorRestante.value--
+      if (temporizadorRestante.value === 0) {
+        finalizarTemporizador()
+      }
+    }
+  }, 1000)
+}
+
+function pausarTemporizador() {
+  temporizadorPausado.value = true
+}
+function reanudarTemporizador() {
+  temporizadorPausado.value = false
+}
+function reiniciarTemporizador() {
+  temporizadorRestante.value = rutinas.value.find(r => r.id === rutinaTemporizadorId.value)?.duracion * 60 || 0
+  temporizadorPausado.value = false
+}
+function finalizarTemporizador() {
+  temporizadorActivo.value = false
+  rutinaTemporizadorId.value = null
+  temporizadorRestante.value = 0
+  temporizadorPausado.value = false
+  if (temporizadorInterval) clearInterval(temporizadorInterval)
+}
+function formatoTiempo(segundos) {
+  const min = Math.floor(segundos / 60).toString().padStart(2, '0')
+  const sec = (segundos % 60).toString().padStart(2, '0')
+  return `${min}:${sec}`
+}
 import api from '../services/api'
 import { useAuthStore } from '../store/auth'
 const rutinas = ref([])
@@ -343,6 +408,69 @@ async function eliminarRutina(rutinaId) {
 </script>
 
 <style scoped>
+.rutina-timer-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.5rem;
+}
+.rutina-timer-label {
+  color: #228c0f;
+  font-weight: 600;
+  font-size: 1.08rem;
+}
+.timer-play-btn {
+  background: #e6fbe6;
+  color: #32be16;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.timer-play-btn:hover {
+  background: #d2f5d2;
+}
+.timer-box {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.7rem;
+  background: #f4f6fa;
+  border-radius: 10px;
+  padding: 0.5rem 1.1rem;
+  box-shadow: 0 2px 8px rgba(67,176,42,0.07);
+}
+.timer-tiempo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #32be16;
+  letter-spacing: 1px;
+  min-width: 70px;
+  text-align: center;
+}
+.timer-control-btn {
+  background: #fff;
+  color: #228c0f;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.timer-control-btn:hover {
+  background: #e6fbe6;
+}
 .rutinas-container {
   max-width: 900px;
   margin: 2.5rem auto;
