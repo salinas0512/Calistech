@@ -644,6 +644,53 @@ async function eliminarRutina(rutinaId) {
 }
 </style>
 
+@media (max-width: 600px) {
+  .rutinas-container {
+    background: #fff !important;
+    color: #222 !important;
+  }
+  .rutina-card {
+    background: #fff !important;
+    color: #222 !important;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+    border-radius: 16px;
+    margin-bottom: 1.2rem;
+    padding: 1.2rem;
+  }
+  .rutina-card-header h3,
+  .rutina-timer-label,
+  .rutina-actions button,
+  .timer-tiempo,
+  .timer-control-btn,
+  .rutinas-btn,
+  .rutinas-btn-secundario,
+  label,
+  input,
+  select {
+    color: #222 !important;
+    background: #fff !important;
+    font-size: 1rem !important;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+  }
+  input,
+  select {
+    padding: 0.7em 1em;
+    margin-bottom: 0.7em;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .ejercicio-checkbox label {
+    color: #222 !important;
+    background: #fff !important;
+    font-size: 1rem !important;
+  }
+  .tabla-ejercicios {
+    background: #fff !important;
+    color: #222 !important;
+  }
+}
+
 .sin-rutinas-msg {
   color: #888;
   font-size: 1.1rem;
