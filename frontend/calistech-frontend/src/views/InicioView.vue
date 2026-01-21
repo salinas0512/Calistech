@@ -101,4 +101,17 @@
 .inicio-btn:hover {
   opacity: 0.85;
 }
+
+/*media querys*/
+
+@media (max-width: 600px) {
+  .inicio-content {
+    width: 85vw;
+    max-width: 98vw;
+    margin: 6vw 2vw 6vw 2vw;
+    padding: 1.5rem 0.7rem;
+    border-radius: 14px;
+  }
+}
+
 </style>

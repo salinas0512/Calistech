@@ -29,7 +29,7 @@ const handleLogin = async () => {
   <div class="login-container">
     <div class="login-card">
       <i class="fa-solid fa-arrow-left back-btn" @click="router.push('/')"></i>
-      <img src="/logo250.png" alt="Logo CalisTech" class="login-logo" />
+      <img src="/logo500.png" alt="Logo CalisTech" class="login-logo" />
       <h1 class="login-title">Bienvenido a CalisTech</h1>
       <h2 class="login-subtitle">Inicia sesión para continuar</h2>
       <form @submit.prevent="handleLogin">
@@ -79,7 +79,7 @@ const handleLogin = async () => {
   color: #228c0f;
 }
 .login-logo {
-  width: 80px;
+  width: 140px;
   margin-bottom: 1rem;
 }
 .login-title {
@@ -104,6 +104,33 @@ input {
   border: 1px solid #43B02A;
   border-radius: 6px;
   font-size: 1rem;
+  background: #fff !important;
+  color: #222 !important;
+  box-shadow: none;
+}
+input::placeholder {
+  color: #888 !important;
+  opacity: 1;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #fff inset !important;
+  -webkit-text-fill-color: #222 !important;
+}
+
+@media (max-width: 600px) {
+  .login-card {
+    width: 97vw;
+    max-width: 99vw;
+    padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+    border-radius: 14px;
+  }
+  .login-title {
+    font-size: 1.3rem;
+  }
+  .login-logo {
+    width: 140px;
+  }
 }
 .login-btn {
   background: #43B02A;
@@ -143,5 +170,21 @@ input {
   margin-top: 1rem;
   font-size: 1rem;
   text-align: center;
+}
+
+/*media querys*/
+
+@media (max-width: 600px) {
+  .login-card {
+    width: 85vw;
+    max-width: 98vw;
+    height: 75vh;
+    margin: 6vw 2vw 6vw 2vw;
+    padding: 1.5rem 0.7rem;
+    border-radius: 14px;
+  }
+  .login-title {
+     font-size: 2rem;
+  }
 }
 </style>

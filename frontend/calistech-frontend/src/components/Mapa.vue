@@ -117,7 +117,7 @@ function centrarEnMiUbicacion() {
 .btn-geo {
   position: absolute;
   bottom: 18px;
-  right: 18px;
+  left: 18px;
   background: #fff;
   color: #32be16;
   border: none;

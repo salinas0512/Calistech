@@ -86,4 +86,47 @@ function logout() {
 .logout-btn:hover {
   background: #228c0f;
 }
+
+@media (max-width: 700px) {
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+    padding: 0.7rem 0.7rem 0.7rem 0.7rem;
+  }
+  .navbar-logo {
+    height: 60px;
+    margin-bottom: 0.5rem;
+    margin-right: 0;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .navbar-links {
+    flex-direction: column;
+    gap: 0.7rem;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  .navbar-links a {
+    text-align: center;
+    width: 100%;
+  }
+  .logout-btn {
+    margin-left: 0;
+    width: 100%;
+    margin-bottom: 0.2rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/*media querys*/
+@media (max-width: 600px) {
+  .navbar-logo {
+    width: 120px;
+    height: 90px;
+  }
+}
 </style>

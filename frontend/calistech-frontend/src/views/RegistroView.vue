@@ -92,7 +92,7 @@ async function handleRegister() {
   position: relative;
 }
 .registro-logo {
-  width: 80px;
+  width: 140px;
   margin-bottom: 1rem;
 }
 .registro-title {
@@ -204,5 +204,15 @@ button[disabled] {
 }
 .back-btn:hover {
   color: #228c0f;
+}
+@media (max-width: 600px) {
+  .registro-card {
+    width: 85vw;
+    max-width: 98vw;
+    height: 78vh;
+    margin: 6vw 2vw 6vw 2vw;
+    padding: 1.5rem 0.7rem;
+    border-radius: 14px;
+  }
 }
 </style>

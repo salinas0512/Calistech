@@ -118,7 +118,7 @@ const rutinas = [
 <style scoped>
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
 .dashboard-hero {
-  width: 100vw;
+  width: 100%;
   min-height: 450px;
   background: url('/calistechf2.jpg');
   background-size: cover;

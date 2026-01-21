@@ -167,6 +167,7 @@ function guardarNivel() {
 </script>
 
 <style scoped>
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
 /* Modal de eliminación */
 .modal-eliminar-overlay {
   position: fixed;
@@ -196,7 +197,7 @@ function guardarNivel() {
   gap: 1.2rem;
   margin-top: 1.2rem;
 }
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
+
 .perfil-container {
   min-height: 100vh;
   display: flex;

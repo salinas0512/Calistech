@@ -231,6 +231,20 @@ cargarParques()
   flex-direction: column;
   align-items: flex-start;
 }
+
+@media (max-width: 700px) {
+  .parques-list {
+    justify-content: center;
+    gap: 1.2rem;
+  }
+  .parque-card {
+    width: 90vw;
+    max-width: 340px;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
 .parques-btn {
   background: #32be16;
   color: #fff;
