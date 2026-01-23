@@ -1,17 +1,22 @@
 <template>
-  <div class="rutinas-container">
-    <div class="rutinas-header">
-      <h2>Mis Rutinas</h2>
-      <button class="rutinas-btn" @click="mostrarFormulario = true">+ Nueva rutina</button>
+  <div class="rutinas-dashboard-hero">
+    <div class="rutinas-hero-overlay">
+      <div class="rutinas-hero-content">
+        <h1 class="rutinas-hero-title">Mis Rutinas</h1>
+        <p class="rutinas-hero-subtitle">Organiza y crear tus nuevas rutinas calisténicas</p>
+        <button class="rutinas-btn" @click="mostrarFormulario = true">+ Nueva rutina</button>
+      </div>
     </div>
-    <div class="rutinas-list">
+  </div>
+  <div class="rutinas-container">
+    <div class="rutinas-wrapper">
       <div v-if="cargando">Cargando rutinas...</div>
       <div v-else-if="error">{{ error }}</div>
       <div v-else-if="rutinas.length === 0" class="sin-rutinas-msg">
         Aún no tienes rutinas creadas. ¡Haz clic en "Nueva rutina" para comenzar!
       </div>
-      <div v-else>
-        <div class="rutina-card" v-for="rutina in rutinas" :key="rutina.id">
+      <template v-else>
+        <div class="tarjeta" v-for="rutina in rutinas" :key="rutina.id">
           <div class="rutina-card-header">
             <h3>{{ rutina.nombre }}</h3>
             <div class="rutina-actions">
@@ -48,8 +53,9 @@
           <p v-if="rutina.ejercicios">Ejercicios: {{ rutina.ejercicios.length }}</p>
           <button class="rutinas-btn-secundario" @click="verDetalleRutina(rutina)">Ver detalles</button>
         </div>
-      </div>
+      </template>
     </div>
+  </div>
 
     <!-- Modal/Formulario para crear rutina -->
     <div v-if="mostrarFormulario" class="modal-bg">
@@ -105,11 +111,11 @@
             </table>
           </div>
           <div v-if="formError" class="form-error">{{ formError }}</div>
+          <div class="modal-actions fixed-modal-actions">
+            <button type="submit" class="rutinas-btn">{{ editandoRutina ? 'Guardar cambios' : 'Crear' }}</button>
+            <button type="button" class="rutinas-btn-secundario" @click="cerrarFormulario">Cancelar</button>
+          </div>
         </form>
-        <div class="modal-actions fixed-modal-actions">
-          <button type="submit" class="rutinas-btn" form="">{{ editandoRutina ? 'Guardar cambios' : 'Crear' }}</button>
-          <button type="button" class="rutinas-btn-secundario" @click="cerrarFormulario">Cancelar</button>
-        </div>
       </div>
     </div>
 
@@ -148,7 +154,7 @@
         </div>
       </div>
     </div>
-  </div>
+    
 </template>
 
 
@@ -418,11 +424,21 @@ async function eliminarRutina(rutinaId) {
   margin-bottom: 0.5rem;
 }
 .rutina-timer-label {
-  color: #228c0f;
-  font-weight: 600;
-  font-size: 1.08rem;
+  color: #32be16;
+  font-weight: bold;
 }
-.timer-play-btn {
+  .rutinas-dashboard-hero {
+    width: 100%;
+    min-height: 320px;
+    background: url('/rutinasFondo.jpg');
+    background-size: cover;
+    background-position: center center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .timer-play-btn {
   background: #e6fbe6;
   color: #32be16;
   border: none;
@@ -474,11 +490,45 @@ async function eliminarRutina(rutinaId) {
 .timer-control-btn:hover {
   background: #e6fbe6;
 }
-.rutinas-container {
-  max-width: 900px;
-  margin: 2.5rem auto;
-  padding: 0 1.5rem;
-}
+  .rutinas-hero-overlay {
+    width: 100%;
+    min-height: 220px;
+    background: rgba(34, 44, 68, 0.304);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .rutinas-hero-content {
+    text-align: center;
+    color: #fff;
+    padding: 2.5rem 1.5rem 2rem 1.5rem;
+  }
+  .rutinas-hero-title {
+    font-size: 2.2rem;
+    font-family: 'Montserrat', 'Poppins', Arial, sans-serif;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.5px;
+    color: #fff;
+  }
+  .rutinas-hero-subtitle {
+    font-size: 1.1rem;
+    font-family: 'Montserrat', 'Poppins', Arial, sans-serif;
+    font-weight: 400;
+    margin-bottom: 1.2rem;
+    color: #fff;
+  }
+  @media (max-width: 700px) {
+    .rutinas-dashboard-hero {
+      min-height: 180px;
+    }
+    .rutinas-hero-title {
+      font-size: 1.4rem;
+    }
+    .rutinas-hero-content {
+      padding: 1.2rem 0.5rem 1rem 0.5rem;
+    }
+  }
 .rutinas-header {
   display: flex;
   justify-content: space-between;
@@ -499,13 +549,16 @@ async function eliminarRutina(rutinaId) {
 .rutinas-btn:hover {
   background: #228c0f;
 }
-.rutinas-list {
+.rutinas-wrapper {
   display: flex;
+  gap: 1rem;
   flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: flex-start;
+  overflow-x: unset;
+  overflow-y: unset;
+  padding: 1rem;
+  scroll-snap-type: none;
 }
-.rutina-card {
+.tarjeta {
   background: #fff;
   border-radius: 14px;
   box-shadow: 0 2px 12px rgba(67,176,42,0.08);
@@ -514,14 +567,29 @@ async function eliminarRutina(rutinaId) {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 20px;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
 }
-.rutina-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+@media (max-width: 700px) {
+  .rutinas-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    overflow-x: unset;
+    overflow-y: unset;
+    padding: 1rem 0.5rem;
+    scroll-snap-type: none;
+  }
+  .tarjeta {
+    width: 90vw;
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    scroll-snap-align: none;
+  }
 }
+
 .rutina-actions {
   display: flex;
   gap: 0.5rem;
@@ -710,6 +778,9 @@ async function eliminarRutina(rutinaId) {
   gap: 1rem;
   justify-content: center;
 }
+
+
+
 @media (max-width: 600px) {
   .responsive-modal {
     max-width: 99vw;
@@ -742,6 +813,84 @@ async function eliminarRutina(rutinaId) {
   background: #32be16;
   border-radius: 5px;
   color: #fff;
+}
+.rutinas-hero-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: #224da21e;
+  position: relative;
+  overflow: hidden;
+}
+.rutinas-hero-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url('/rutinasFondo.jpg') center center/cover no-repeat;
+  opacity: 0.70;
+  z-index: 0;
+  pointer-events: none;
+}
+.rutinas-hero-content {
+  background: rgba(34, 44, 68, 0.219);
+  box-shadow: 0 4px 24px rgba(67,176,42,0.10);
+  padding: 2.5rem 2rem;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+  position: relative;
+  margin-top: 3rem;
+  margin-bottom: 2.5rem;
+}
+.rutinas-hero-logo {
+  width: 120px;
+  margin-bottom: 1rem;
+}
+.rutinas-hero-title {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.rutinas-hero-slogan {
+  color: #0072BC;
+  font-size: 1.08rem;
+  margin-bottom: 1.2rem;
+  font-weight: 500;
+  text-align: center;
+}
+@media (max-width: 600px) {
+  .rutinas-hero-content {
+    width: 90vw;
+    max-width: 98vw;
+    margin: 6vw 2vw 6vw 2vw;
+    padding: 1.5rem 0.7rem;
+    border-radius: 14px;
+  }
+  .rutinas-hero-logo {
+    width: 80px;
+  }
+}
+@media (max-width: 700px) {
+  .rutina-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+  .rutina-card-header h3 {
+    width: 100%;
+    margin-bottom: 0.2rem;
+  }
+  .rutina-actions {
+    width: 100%;
+    justify-content: center;
+  }
 }
 }
 </style>
