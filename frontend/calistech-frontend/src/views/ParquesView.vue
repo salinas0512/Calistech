@@ -18,14 +18,9 @@
   <div class="parques-container">
     <h2>Parques de Calistenia</h2>
     <div class="parques-filtro-row">
-      <div class="parques-filtro-input-wrapper">
-        <input v-model="filtro" type="text" placeholder="Filtrar por nombre o comuna..." class="parques-filtro-input" />
-        <span class="parques-filtro-icon">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="9" cy="9" r="7" stroke="#32be16" stroke-width="2"/>
-            <line x1="14.2929" y1="14.7071" x2="18" y2="18.4142" stroke="#32be16" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </span>
+      <div class="parques-filtro-input-wrapper" style="margin-bottom: 20px;">
+        <input v-model="filtro" type="text" placeholder="Filtrar por nombre o comuna..." 
+        style="border-radius: 12px; width: 100%;min-height: 30px; border: 1px solid #43B02A ;"  />
       </div>
     </div>
     <div class="parques-list">
@@ -172,6 +167,8 @@ cargarParques()
     border: 1px solid #d2e5d2;
     border-radius: 7px;
     font-size: 1rem;
+    border: 1px solid #43B02A;
+    background: #fff;
   }
   .btn-ubicacion {
     background: #e6fbe6;
@@ -275,30 +272,23 @@ cargarParques()
   display: flex;
   justify-content: flex-end;
 }
-.parques-filtro-input-wrapper {
+.parques-filtro-input-wrapper i{
   position: relative;
-  display: flex;
-  align-items: center;
-  background: #fff;
-  border: 2px solid #32be16;
-  border-radius: 999px;
-  box-shadow: 0 2px 12px rgba(67,176,42,0.13);
-  min-width: 260px;
+  width: 100%;
   max-width: 350px;
-  padding: 0;
+  margin: 0 auto 1.2rem auto;
 }
 .parques-filtro-input {
-  border: none;
-  outline: none;
-  font-size: 1.08rem;
-  padding: 0.7rem 2.2rem 0.7rem 1.1rem;
-  background: transparent;
   width: 100%;
-  color: #228c0f;
-  border-radius: 999px;
-  box-shadow: none;
-  transition: box-shadow 0.18s;
+  padding: 0.7rem 2.2rem 0.7rem 1rem;
+  border-radius: 8px;
+  border: 2px solid #43B02A ;
+  border-radius: 12px;
+  font-size: 1.08rem;
+  background: #fff;
+  box-sizing: border-box;
 }
+
 .parques-filtro-input:focus {
   box-shadow: 0 0 0 2px #a5d6a7;
 }
@@ -307,21 +297,13 @@ cargarParques()
   opacity: 1;
   font-size: 1.01rem;
 }
-.parques-filtro-icon {
-  position: absolute;
-  right: 1.1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  pointer-events: none;
-}
 }
 .mapa-placeholder {
   color: #bbb;
   font-size: 1.2rem;
   padding: 2rem 0;
 }
+
 </style>
 
 

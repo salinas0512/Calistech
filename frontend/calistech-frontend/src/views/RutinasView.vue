@@ -53,9 +53,9 @@
 
     <!-- Modal/Formulario para crear rutina -->
     <div v-if="mostrarFormulario" class="modal-bg">
-      <div class="modal-form">
+      <div class="modal-form responsive-modal">
         <h3>{{ editandoRutina ? 'Editar rutina' : 'Crear nueva rutina' }}</h3>
-        <form @submit.prevent="editandoRutina ? guardarEdicionRutina() : crearRutina()">
+        <form class="modal-form-content" @submit.prevent="editandoRutina ? guardarEdicionRutina() : crearRutina()">
           <label>Nombre:</label>
           <input v-model="nuevaRutina.nombre" type="text" required />
           <label>Nivel:</label>
@@ -87,25 +87,29 @@
                 <tr v-for="ej in ejerciciosSeleccionados" :key="ej.nombre">
                   <td>{{ ej.nombre }}</td>
                   <td>
-                    <button type="button" @click="cambiarReps(ej.nombre, -1)">-</button>
-                    <span class="contador">{{ ej.reps }}</span>
-                    <button type="button" @click="cambiarReps(ej.nombre, 1)">+</button>
+                    <div class="control-flex">
+                      <button type="button" @click="cambiarReps(ej.nombre, -1)">-</button>
+                      <span class="contador">{{ ej.reps }}</span>
+                      <button type="button" @click="cambiarReps(ej.nombre, 1)">+</button>
+                    </div>
                   </td>
                   <td>
-                    <button type="button" @click="cambiarSeries(ej.nombre, -1)">-</button>
-                    <span class="contador">{{ ej.series }}</span>
-                    <button type="button" @click="cambiarSeries(ej.nombre, 1)">+</button>
+                    <div class="control-flex">
+                      <button type="button" @click="cambiarSeries(ej.nombre, -1)">-</button>
+                      <span class="contador">{{ ej.series }}</span>
+                      <button type="button" @click="cambiarSeries(ej.nombre, 1)">+</button>
+                    </div>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="modal-actions">
-            <button type="submit" class="rutinas-btn">{{ editandoRutina ? 'Guardar cambios' : 'Crear' }}</button>
-            <button type="button" class="rutinas-btn-secundario" @click="cerrarFormulario">Cancelar</button>
-          </div>
           <div v-if="formError" class="form-error">{{ formError }}</div>
         </form>
+        <div class="modal-actions fixed-modal-actions">
+          <button type="submit" class="rutinas-btn" form="">{{ editandoRutina ? 'Guardar cambios' : 'Crear' }}</button>
+          <button type="button" class="rutinas-btn-secundario" @click="cerrarFormulario">Cancelar</button>
+        </div>
       </div>
     </div>
 
@@ -633,23 +637,111 @@ async function eliminarRutina(rutinaId) {
   color: #fff;
 }
 .contador {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: 2.2em;
+  height: 2.2em;
   text-align: center;
   font-weight: 600;
+  font-size: 1.1em;
+}
+
+.control-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2em;
+}
+@media (max-width: 600px) {
+  .contador {
+    min-width: 1.7em;
+    height: 1.7em;
+    font-size: 1em;
+  }
+  .control-flex {
+    gap: 0.1em;
+  }
 }
 .tabla-ejercicios button {
   background: #e5e7eb;
   border: none;
-  border-radius: 4px;
+  border-radius: 50%;
+  width: 2.2em;
+  height: 2.2em;
+  font-size: 1.3em;
+  margin: 0 0.2em;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+}
+.tabla-ejercicios button:hover {
+  background: #b6e3b6;
+}
+/* --- MODAL RESPONSIVE PARA CREAR RUTINA --- */
+.responsive-modal {
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.modal-form-content {
+  overflow-y: auto;
+  flex: 1 1 auto;
+  padding-bottom: 1.5rem; /* espacio para los botones fijos */
+}
+.fixed-modal-actions {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  background: #fff;
+  z-index: 10;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  box-shadow: 0 -2px 8px rgba(67,176,42,0.08);
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+@media (max-width: 600px) {
+  .responsive-modal {
+    max-width: 99vw;
+    min-width: unset;
+    padding: 1rem 0.5rem;
+  }
+  .modal-form-content {
+    font-size: 0.98em;
+    padding-bottom: 2.5rem;
+  }
+  .fixed-modal-actions {
+    padding-bottom: 1.2rem;
+  }
+  .tabla-ejercicios button {
+  background: #e5e7eb;
+  border: none;
+  border-radius: 50%;
   width: 2em;
   height: 2em;
   font-size: 1.1em;
   margin: 0 0.2em;
   cursor: pointer;
   transition: background 0.2s;
+  margin-bottom: 5px;
 }
-.tabla-ejercicios button:hover {
-  background: #b6e3b6;
+.tabla-ejercicios th, .tabla-ejercicios td {
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 0.7rem;
+  text-align: left;
+  background: #32be16;
+  border-radius: 5px;
+  color: #fff;
+}
 }
 </style>
+
+
