@@ -105,8 +105,9 @@ span{
   }
 }
 @media (max-width: 600px) {
-  input{
+  input, textarea{
     background: #fff;
-    border: 1px solid #43B02A;
+    border: 1px solid #43B02A; 
+    color: #484a4c;
 }
 }
