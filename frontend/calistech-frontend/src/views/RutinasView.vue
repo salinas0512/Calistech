@@ -891,6 +891,9 @@ async function eliminarRutina(rutinaId) {
     width: 100%;
     justify-content: center;
   }
+  .icon-btn{
+    color: rgba(15, 14, 14, 0.881);
+  }
 }
 }
 </style>
