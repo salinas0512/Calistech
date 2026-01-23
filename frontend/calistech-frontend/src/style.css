@@ -79,11 +79,16 @@ button:focus-visible {
   text-align: center;
 }
 label {
-  color: black;
+  color: #555A60;
   font-size: 14px;
   font-family: Arial, sans-serif;
   display: block; 
   margin-bottom: 5px;
+}
+span{
+  color: #555A60;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
 }
 
 
@@ -98,4 +103,10 @@ label {
   button {
     background-color: #f9f9f9;
   }
+}
+@media (max-width: 600px) {
+  input{
+    background: #fff;
+    border: 1px solid #43B02A;
+}
 }

@@ -20,7 +20,7 @@
     <div class="parques-filtro-row">
       <div class="parques-filtro-input-wrapper" style="margin-bottom: 20px;">
         <input v-model="filtro" type="text" placeholder="Filtrar por nombre o comuna..." 
-        style="border-radius: 12px; width: 100%;min-height: 30px; border: 1px solid #43B02A ;"  />
+        style="border-radius: 12px; width: 100%;min-height: 30px; border: 1px solid #43B02A ; background: #fff;"  />
       </div>
     </div>
     <div class="parques-list">

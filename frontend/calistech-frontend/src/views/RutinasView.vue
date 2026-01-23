@@ -582,8 +582,9 @@ async function eliminarRutina(rutinaId) {
   margin-bottom: 1rem;
   padding: 0.5rem;
   border-radius: 8px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #43B02A;
   font-size: 1rem;
+  background: #fff;
 }
 .ejercicios-list {
   display: flex;
@@ -594,6 +595,7 @@ async function eliminarRutina(rutinaId) {
 .ejercicio-checkbox {
   display: flex;
   align-items: center;
+  color: #32be16;
 }
 .ej-nivel {
   color: #888;
