@@ -2,7 +2,9 @@
   <div class="perfil-container">
     <div class="perfil-card">
       <div class="perfil-avatar-section">
-        <img :src="user.fotoPerfil || defaultAvatar" alt="Foto de perfil" class="perfil-avatar" />
+        <div class="perfil-avatar-wrapper">
+          <img class="perfil-avatar" :src="user.fotoPerfil || defaultAvatar" alt="Foto de perfil" />
+        </div>
         <button class="perfil-btn perfil-btn-foto" @click="cambiarFoto">Cambiar foto</button>
       </div>
       <div class="perfil-info">
@@ -96,7 +98,7 @@ import { ref, onMounted } from 'vue'
 import { useAuthStore } from '../store/auth'
 import api from '../services/api'
 import { useRouter } from 'vue-router'
-const defaultAvatar = '/avatar-default.png'
+const defaultAvatar = '/perfil.png'
 const user = ref({})
 const auth = useAuthStore()
 
@@ -222,13 +224,20 @@ function guardarNivel() {
   align-items: center;
   margin-bottom: 1.2rem;
 }
+.perfil-avatar-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
 .perfil-avatar {
   width: 110px;
   height: 110px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #32be16;
-  margin-bottom: 0.7rem;
+  border: none;
+  background: #f4f6fa;
+  box-shadow: 0 2px 8px rgba(67,176,42,0.08);
 }
 .perfil-btn {
   background: #32be16;

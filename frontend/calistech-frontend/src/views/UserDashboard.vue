@@ -152,12 +152,14 @@ const rutinas = [
   font-weight: bold;
   margin-bottom: 0.5rem;
   letter-spacing: 0.5px;
+  color: #fff;
 }
 .hero-subtitle {
   font-size: 1.2rem;
   font-family: 'Montserrat', 'Poppins', Arial, sans-serif;
   font-weight: 400;
   margin-bottom: 0;
+  color: #fff;
 }
 .dashboard-main {
   max-width: 700px;

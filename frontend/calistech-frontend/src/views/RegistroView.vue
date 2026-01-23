@@ -214,5 +214,29 @@ button[disabled] {
     padding: 1.5rem 0.7rem;
     border-radius: 14px;
   }
+  input{
+    border: 1px solid #43B02A;
+    background: #fff;
+  }
 }
+
+@media (max-width: 480px) {
+  .registro-card {
+    width: 90vw;
+    max-width: 98vw;
+    height: auto; /* mejor que fijar altura en móviles pequeños */
+    margin: 4vw 2vw;
+    padding: 1rem 0.5rem;
+    border-radius: 12px;
+  }
+  input{
+    border: 1px solid #43B02A;
+    background: #fff;
+  }
+  .registro-title {
+    font-size: 1.6rem; /* más pequeño para pantallas reducidas */
+    text-align: center;
+  }
+}
+
 </style>

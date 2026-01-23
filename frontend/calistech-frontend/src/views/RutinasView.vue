@@ -117,8 +117,7 @@
           <p><b>Nombre:</b> {{ detalleRutina.nombre }}</p>
           <p><b>Nivel:</b> {{ detalleRutina.nivel }}</p>
           <p><b>Duración:</b> {{ detalleRutina.duracion }} min</p>
-          <div v-if="detalleEjercicios.length">
-            <h4>Ejercicios:</h4>
+          <div class="tabla" v-if="detalleEjercicios.length">
             <table class="tabla-ejercicios">
               <thead>
                 <tr>
@@ -511,6 +510,7 @@ async function eliminarRutina(rutinaId) {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin-bottom: 20px;
 }
 .rutina-card-header {
   display: flex;
@@ -606,21 +606,31 @@ async function eliminarRutina(rutinaId) {
   font-size: 1rem;
   margin-top: 0.5rem;
 }
+.tabla{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .tabla-ejercicios {
   margin: 1rem 0;
   max-height: 260px;
   overflow-y: auto;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(67,176,42,0.08);
+  align-self: flex-start;
 }
 .tabla-ejercicios table {
   width: 100%;
   border-collapse: collapse;
+
 }
 .tabla-ejercicios th, .tabla-ejercicios td {
   border: 1px solid #d1d5db;
   padding: 0.5rem 0.7rem;
   text-align: center;
+  background: #32be16;
+  border-radius: 5px;
+  color: #fff;
 }
 .contador {
   display: inline-block;
@@ -643,58 +653,3 @@ async function eliminarRutina(rutinaId) {
   background: #b6e3b6;
 }
 </style>
-
-@media (max-width: 600px) {
-  .rutinas-container {
-    background: #fff !important;
-    color: #222 !important;
-  }
-  .rutina-card {
-    background: #fff !important;
-    color: #222 !important;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.10);
-    border-radius: 16px;
-    margin-bottom: 1.2rem;
-    padding: 1.2rem;
-  }
-  .rutina-card-header h3,
-  .rutina-timer-label,
-  .rutina-actions button,
-  .timer-tiempo,
-  .timer-control-btn,
-  .rutinas-btn,
-  .rutinas-btn-secundario,
-  label,
-  input,
-  select {
-    color: #222 !important;
-    background: #fff !important;
-    font-size: 1rem !important;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-  }
-  input,
-  select {
-    padding: 0.7em 1em;
-    margin-bottom: 0.7em;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  .ejercicio-checkbox label {
-    color: #222 !important;
-    background: #fff !important;
-    font-size: 1rem !important;
-  }
-  .tabla-ejercicios {
-    background: #fff !important;
-    color: #222 !important;
-  }
-}
-
-.sin-rutinas-msg {
-  color: #888;
-  font-size: 1.1rem;
-  padding: 2rem 0;
-  text-align: center;
-  width: 100%;
-}

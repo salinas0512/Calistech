@@ -50,7 +50,7 @@ const handleLogin = async () => {
 
 <style scoped>
 .login-container {
-  min-height: 100vh;
+  min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -171,6 +171,10 @@ input:-webkit-autofill:focus {
   font-size: 1rem;
   text-align: center;
 }
+ .login-title {
+    font-size: 1.6rem; /* un poco más pequeño para pantallas reducidas */
+    text-align: center;
+  }
 
 /*media querys*/
 
@@ -183,8 +187,29 @@ input:-webkit-autofill:focus {
     padding: 1.5rem 0.7rem;
     border-radius: 14px;
   }
+  input{
+    border: 1px solid #43B02A;
+    background: #fff;
+  }
   .login-title {
      font-size: 2rem;
   }
 }
+
+@media (max-width: 480px) {
+  .login-card {
+    width: 90vw;
+    max-width: 98vw;
+    height: auto; /* mejor que fijar altura en móviles pequeños */
+    margin: 4vw 2vw;
+    padding: 1rem 0.5rem;
+    border-radius: 12px;
+  }
+  input{
+    border: 1px solid #43B02A;
+    background: #fff;
+  }
+ 
+}
+
 </style>
